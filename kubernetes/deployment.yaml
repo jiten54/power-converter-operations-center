@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: power-converter-ops-center
+  namespace: default
+  labels:
+    app: power-converter-ops-center
+    tier: control-room
+spec:
+  replicas: 3
+  selector:
+    matchLabels:
+      app: power-converter-ops-center
+  strategy:
+    type: RollingUpdate
+    rollingUpdate:
+      maxSurge: 1
+      maxUnavailable: 0
+  template:
+    metadata:
+      labels:
+        app: power-converter-ops-center
+    spec:
+      containers:
+        - name: ops-center
+          image: ghcr.io/cern-ops/power-converter-ops-center:latest
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 3000
+              name: web
+          env:
+            - name: NODE_ENV
+              value: "production"
+            - name: DATABASE_URL
+              valueFrom:
+                secretKeyRef:
+                  name: power-ops-secrets
+                  key: database-url
+          resources:
+            limits:
+              cpu: "1"
+              memory: 1024Mi
+            requests:
+              cpu: 250m
+              memory: 512Mi
+          livenessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 15
+            periodSeconds: 10
+          readinessProbe:
+            httpGet:
+              path: /api/health
+              port: 3000
+            initialDelaySeconds: 5
+            periodSeconds: 5

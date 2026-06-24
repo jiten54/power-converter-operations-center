@@ -1,0 +1,6 @@
+{
+  "name": "Power Converter Operations Center",
+  "description": "CERN-Inspired Power Converter Operations Center. Integrates high-fidelity asset management, real-time telemetry streaming, industrial alarm consoles, maintenance logging, Agile scrum boards, user requirement priority tracking, application support pipelines, and an interactive DevOps terminal with real-time Kubernetes/Docker orchestrations.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
